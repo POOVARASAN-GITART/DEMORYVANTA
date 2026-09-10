@@ -190,11 +190,8 @@ const registerHandler = async (req, res) => {
   }
 };
 
-app.post('/api/register', registerHandler);
-app.post('/.netlify/functions/index/register', registerHandler);
-app.post('/.netlify/functions/index/api/register', registerHandler);
-
-const serverless = require('serverless-http');
+app.post('/api/register', registerHandler); // local dev via vite proxy
+app.post('/register', registerHandler); // Netlify via serverless-http basePath
 
 // Local Development
 if (process.env.NODE_ENV !== 'production' && !process.env.NETLIFY) {
@@ -204,5 +201,5 @@ if (process.env.NODE_ENV !== 'production' && !process.env.NETLIFY) {
   });
 }
 
-// Netlify Serverless Export
-module.exports.handler = serverless(app);
+// Export the Express app so netlify/functions/api.js can use it
+module.exports = app;
