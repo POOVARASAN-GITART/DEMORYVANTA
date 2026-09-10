@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #0ea5e9;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 30px;
+            color: #333333;
+            line-height: 1.6;
+        }
+        .highlight {
+            background-color: #f0f9ff;
+            border-left: 4px solid #0ea5e9;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .id-badge {
+            font-size: 20px;
+            font-weight: bold;
+            color: #0ea5e9;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #777777;
+            border-top: 1px solid #eeeeee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>RYVANTA Registration Confirmed</h1>
+        </div>
+        <div class="content">
+            <p>Dear <strong>{{ leader_name }}</strong>,</p>
+            <p>Thank you for registering your team <strong>{{ team_name }}</strong> for <strong>{{ event_name }}</strong> at RYVANTA.</p>
+            
+            <div class="highlight">
+                <p style="margin: 0;">Your Official Team ID is:</p>
+                <p class="id-badge" style="margin: 10px 0 0 0;">{{ registration_id }}</p>
+            </div>
+            
+            <p>Your payment is currently pending verification. You will receive further instructions and event details shortly.</p>
+            <p>Please keep this Team ID handy, as it will be required for all future communications and check-ins during the event.</p>
+            
+            <p>Best Regards,<br>The RYVANTA Team</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2026 RYVANTA. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
