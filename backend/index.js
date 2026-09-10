@@ -141,7 +141,7 @@ app.get('/', (req, res) => {
   res.send('RYVANTA API is running. The frontend application is available at http://localhost:5173');
 });
 
-app.post('/api/register', async (req, res) => {
+const registerHandler = async (req, res) => {
   try {
     const data = req.body;
     const payload = {
@@ -170,7 +170,11 @@ app.post('/api/register', async (req, res) => {
     console.error(error);
     return res.status(400).json({ success: false, errors: error.message });
   }
-});
+};
+
+app.post('/api/register', registerHandler);
+app.post('/.netlify/functions/index/register', registerHandler);
+app.post('/.netlify/functions/index/api/register', registerHandler);
 
 const serverless = require('serverless-http');
 
