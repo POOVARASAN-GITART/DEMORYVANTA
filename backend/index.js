@@ -81,7 +81,23 @@ const transporter = nodemailer.createTransport({
 
 const sendConfirmationEmail = async (registration) => {
   const subject = `Registration Confirmation - ${registration.event_name}`;
-  const htmlContent = `
+
+  // Gather all recipients (Leader + Members)
+  const recipients = [
+    { name: registration.leader_name, email: registration.leader_email, role: 'Team Leader' }
+  ];
+  
+  if (registration.members && registration.members.length > 0) {
+    registration.members.forEach(member => {
+      if (member.email && member.email.trim() !== '') {
+        recipients.push({ name: member.name || 'Team Member', email: member.email, role: 'Team Member' });
+      }
+    });
+  }
+
+  // Send individually to each student
+  for (const recipient of recipients) {
+    const htmlContent = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -102,15 +118,15 @@ const sendConfirmationEmail = async (registration) => {
             <h1>RYVANTA Registration Confirmed</h1>
         </div>
         <div class="content">
-            <p>Dear <strong>${registration.leader_name}</strong>,</p>
-            <p>Thank you for registering your team <strong>${registration.team_name}</strong> for <strong>${registration.event_name}</strong> at RYVANTA.</p>
+            <p>Dear <strong>${recipient.name}</strong>,</p>
+            <p>Thank you for registering as a <strong>${recipient.role}</strong> for the team <strong>${registration.team_name}</strong> in <strong>${registration.event_name}</strong> at RYVANTA.</p>
             
             <div class="highlight">
                 <p style="margin: 0;">Your Official Team ID is:</p>
                 <p class="id-badge" style="margin: 10px 0 0 0;">${registration.registration_id}</p>
             </div>
             
-            <p>Your payment is currently pending verification. You will receive further instructions and event details shortly.</p>
+            <p>Your payment is currently pending verification. The team leader will receive further instructions and event details shortly.</p>
             <p>Please keep this Team ID handy, as it will be required for all future communications and check-ins during the event.</p>
             
             <p>Best Regards,<br>The RYVANTA Team</p>
@@ -121,19 +137,21 @@ const sendConfirmationEmail = async (registration) => {
     </div>
 </body>
 </html>
-  `;
-  const textContent = htmlContent.replace(/<[^>]+>/g, '');
+    `;
+    const textContent = htmlContent.replace(/<[^>]+>/g, '');
 
-  try {
-    await transporter.sendMail({
-      from: process.env.DEFAULT_FROM_EMAIL || process.env.EMAIL_HOST_USER || 'noreply@ryvanta.com',
-      to: registration.leader_email,
-      subject: subject,
-      text: textContent,
-      html: htmlContent
-    });
-  } catch (error) {
-    console.error("Failed to send email:", error);
+    try {
+      await transporter.sendMail({
+        from: process.env.DEFAULT_FROM_EMAIL || process.env.EMAIL_HOST_USER || 'noreply@ryvanta.com',
+        to: recipient.email,
+        subject: subject,
+        text: textContent,
+        html: htmlContent
+      });
+      console.log(`Confirmation email sent successfully to: ${recipient.email}`);
+    } catch (error) {
+      console.error(`Failed to send email to ${recipient.email}:`, error);
+    }
   }
 };
 
