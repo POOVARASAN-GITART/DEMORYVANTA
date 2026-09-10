@@ -1,7 +1,7 @@
 import urllib.request
 import json
 
-url = 'http://127.0.0.1:8000/api/register/'
+url = 'http://127.0.0.1:8000/api/register'
 data = {
     'teamName': 'Test Team 2',
     'institution': 'Test Inst',

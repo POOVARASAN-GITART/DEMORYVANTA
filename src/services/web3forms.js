@@ -1,6 +1,6 @@
 export async function submitToWeb3Forms(record) {
     try {
-        const response = await fetch("/api/register/", {
+        const response = await fetch("/api/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -25,13 +25,13 @@ export async function submitToWeb3Forms(record) {
         if (result && result.errors) {
             throw new Error("Validation Error: " + JSON.stringify(result.errors));
         }
-        throw new Error(`Server Error (Status ${response.status}). Is Django running?`);
+        throw new Error(`Server Error (Status ${response.status}). Is the Node.js server running?`);
     } catch (err) {
         console.error("API submission failed:", err);
         // If it's our custom error, rethrow it so it shows up in the UI
         if (err.message.includes("Validation Error") || err.message.includes("Server Error")) {
             throw err;
         }
-        throw new Error("Could not connect to the backend server. Is Django running?");
+        throw new Error("Could not connect to the backend server. Is the Node.js server running?");
     }
 }
